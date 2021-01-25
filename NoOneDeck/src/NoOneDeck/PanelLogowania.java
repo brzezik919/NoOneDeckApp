@@ -18,6 +18,7 @@ import javax.swing.JPasswordField;
 public class PanelLogowania extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	protected static PanelGlowny menu;
 	private JPanel contentPane;
 	private JTextField poleLogin;
 	private static JPasswordField poleHaslo;
@@ -69,8 +70,7 @@ public class PanelLogowania extends JFrame {
 				}
 				if (potwierdzenie){
 					try {
-						@SuppressWarnings("unused")
-						PanelGlowny menu = new PanelGlowny(login);
+						menu = new PanelGlowny(login);
 						((Window) Logowanie.frame).dispose();
 					} catch (Exception e1) {
 						e1.printStackTrace();

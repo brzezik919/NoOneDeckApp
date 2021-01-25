@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 public class PanelGlowny extends JFrame {
 
 	protected static String zalogowanyUzytkownik;
+	protected static PanelDecklisty panelDecklisty;
 	private JPanel contentPane;
 	public PanelGlowny(String login) {
 		zalogowanyUzytkownik = login;
@@ -68,7 +69,7 @@ public class PanelGlowny extends JFrame {
 					@SuppressWarnings("unused")
 					public void run() {
 						try {
-							PanelDecklisty panelDecklisty = new PanelDecklisty();
+							panelDecklisty = new PanelDecklisty();
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}

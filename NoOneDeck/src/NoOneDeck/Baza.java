@@ -152,26 +152,28 @@ public class Baza {
 	public static List<String> wyszukanieKart(String id, String zalogowanyUzytkownik) throws SQLException {	
 		Statement stmt = con.createStatement();
 		List<String> wynik = new ArrayList<String>();
-		ResultSet rs = stmt.executeQuery("select idKarta, idNazwa, nazwa from karta inner join user on karta.idUser = user.idUser inner join numer on karta.idNazwa = numer.idNumer where (user.login =\""+zalogowanyUzytkownik+"\" and idNazwa ='"+id+"')");
+		ResultSet rs = stmt.executeQuery("select idKarta, idNazwa, nazwa from karta inner join user on karta.idUser = user.idUser inner join numer on karta.idNazwa = numer.idNumer where nazwa IN (select nazwa from numer where idNumer = '"+id+"') and (user.login = '"+zalogowanyUzytkownik+"')");
 		while(true) {
 			if(rs.next()) {
-				wynik.add(rs.getString("idKarta")+";"+rs.getString("idNazwa")+";"+zalogowanyUzytkownik+";"+rs.getString("nazwa"));
+				wynik.add(rs.getString("idKarta")+";"+id+";"+zalogowanyUzytkownik+";"+rs.getString("nazwa"));
+
 			}
 			else {
 				break;
 			}
 		}	
 		stmt.close();
+		
 		return wynik;
 	}
 
 	public static List<String> WyszukanieKartTeamu(String id, String zalogowanyUzytkownik) throws SQLException {
 		Statement stmt = con.createStatement();
 		List<String> wynik = new ArrayList<String>();
-		ResultSet rs = stmt.executeQuery("select idKarta, idNazwa, login, nazwa from karta inner join user on karta.idUser = user.idUser inner join numer on karta.idNazwa = numer.idNumer  where (idNazwa ='"+id+"' and stan = 'Wolne' and not user.login ='"+zalogowanyUzytkownik+"')");
+		ResultSet rs = stmt.executeQuery("select idKarta, idNazwa, login, nazwa from karta inner join user on karta.idUser = user.idUser inner join numer on karta.idNazwa = numer.idNumer where nazwa IN (select nazwa from numer where idNumer ='"+id+"') and (stan = 'Wolne' and not user.login ='"+zalogowanyUzytkownik+"')");
 		while(true) {
 			if(rs.next()) {
-				wynik.add(rs.getString("idKarta")+";"+rs.getString("idNazwa")+";"+rs.getString("login")+";"+rs.getString("nazwa"));
+				wynik.add(rs.getString("idKarta")+";"+id+";"+rs.getString("login")+";"+rs.getString("nazwa"));
 			}
 			else {
 				break;

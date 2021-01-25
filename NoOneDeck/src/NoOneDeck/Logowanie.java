@@ -7,11 +7,11 @@ public class Logowanie {
 	
 	public static void logIn() throws Exception {
 		
-		Main.baza.polacz();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+					Main.baza.polacz();
 					frame = new PanelLogowania();
 					frame.setTitle("NoOneApp");
 				} catch (Exception e) {
@@ -23,8 +23,7 @@ public class Logowanie {
 	
 	public static void logOut() throws Exception {
 			Baza.rozlacz();
-			//((Window) PanelLogowania.menu).dispose();
-			frame = new PanelLogowania();
-			frame.setTitle("NoOneApp");
+			PanelLogowania.menu.dispose();
+			logIn();
 	}
 }

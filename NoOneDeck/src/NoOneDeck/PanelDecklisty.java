@@ -15,11 +15,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
@@ -38,7 +38,6 @@ public class PanelDecklisty extends JFrame {
 	
 	public PanelDecklisty() throws SQLException {
 			
-		//listaKart = Baza.wczytanieKart(user);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,24 +72,29 @@ public class PanelDecklisty extends JFrame {
 		przyciskWczytaj = new JButton("Wczytaj");
 		przyciskWczytaj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (nazwaKarty.getText() != "") {
-					if(dir != null) {
-						List<String> decklista = new ArrayList<String>();
-						try {
-							decklista = wczytaniePliku(dir, nazwaKarty.getText());
-							List<String> listaIlosciKart = new ArrayList<String>();
-							listaIlosciKart = liczenieKart(decklista);
-							List<String> listaWlascicieliKart = new ArrayList<String>();
-							listaWlascicieliKart = generowanieListyUserow(listaIlosciKart);
-							decklista = wczytaniePliku(dir, nazwaKarty.getText());
-							listaKart = matchowanieList(decklista, listaWlascicieliKart);
-							wczytanieTabeli(listaKart);	
-						} catch (FileNotFoundException e1) {
-							e1.printStackTrace();
-						} catch (SQLException e1) {
-							e1.printStackTrace();
-						}
-					}					
+				String fileFormat = nazwaKarty.getText().substring(nazwaKarty.getText().length()-4,nazwaKarty.getText().length());
+				System.out.println(fileFormat);
+				if (nazwaKarty.getText() != "" && fileFormat.equals(".ydk")) {
+						if(dir != null) {
+							List<String> decklista = new ArrayList<String>();
+							try {
+								decklista = wczytaniePliku(dir, nazwaKarty.getText());
+								List<String> listaIlosciKart = new ArrayList<String>();
+								listaIlosciKart = liczenieKart(decklista);
+								List<String> listaWlascicieliKart = new ArrayList<String>();
+								listaWlascicieliKart = generowanieListyUserow(listaIlosciKart);
+								decklista = wczytaniePliku(dir, nazwaKarty.getText());
+								listaKart = matchowanieList(decklista, listaWlascicieliKart);
+								wczytanieTabeli(listaKart);	
+							} catch (FileNotFoundException e1) {
+								e1.printStackTrace();
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+						}	
+					}
+				else {
+					JOptionPane.showMessageDialog(PanelGlowny.panelDecklisty, "Brak pliku lub niew³aœciwy plik");
 				}
 			}
 		});
@@ -192,43 +196,41 @@ public class PanelDecklisty extends JFrame {
 	
 	private List<String> generowanieListyUserow(List<String> lista) throws SQLException {
 		List<String> listaUserow = new ArrayList <String>();
-		List<String> listaTymczasowa = new ArrayList <String>();
 		
-		for(int i = 0; i<lista.size(); i++) {
-			String[] split = lista.get(i).split(";");
+		for(String kart : lista) {
+			String[] split = kart.split(";");
 			String id = split[0];
 			int count = Integer.parseInt(split[1]);
-			listaTymczasowa = Baza.wyszukanieKart(id, PanelGlowny.zalogowanyUzytkownik);
-			for(int j = 0; j <= count;) {
-				if(listaTymczasowa.size() > 0) {
-					if(count == 0)
-						break;
-					listaUserow.add(listaTymczasowa.get(j));
-					listaTymczasowa.remove(j);
-					count--;
-				}
-				else {
-					listaTymczasowa = Baza.WyszukanieKartTeamu(id, PanelGlowny.zalogowanyUzytkownik);
-					for(int k = 0; k <= count;) {
-						if(listaTymczasowa.size() > 0){
-							if(count == 0)
-								break;
-							listaUserow.add(listaTymczasowa.get(k));
-							listaTymczasowa.remove(k);
-							count--;
-						}
-						else {
-							if(count == 0)
-								break;
-							listaUserow.add("0;"+id+";None;"+Baza.wyciagniecieNazwy(id));						
-							count--;
-						}
-					}
-				}
-			}		
+			int nbCardsNeeded = count;
+			List<String> ownCards =  Baza.wyszukanieKart(id, PanelGlowny.zalogowanyUzytkownik);
+			getCardsFromList(listaUserow, ownCards, nbCardsNeeded);			
+			if(nbCardsNeeded != 0) {
+				List<String> teamCards = Baza.WyszukanieKartTeamu(id, PanelGlowny.zalogowanyUzytkownik);
+				getCardsFromList(listaUserow, teamCards, nbCardsNeeded);
+			}
+			
+			while(nbCardsNeeded != 0) {
+				listaUserow.add("0;"+id+";None;"+Baza.wyciagniecieNazwy(id));
+				nbCardsNeeded--;
+			}
+		
 		}
 		return listaUserow;
 	}
+	
+	private void getCardsFromList(List<String> userList, List<String> targetList, int currentNbCardsNeeded) {
+		if(!targetList.isEmpty()) {
+			if(targetList.size() >= currentNbCardsNeeded) {
+				userList.addAll(targetList.subList(0, currentNbCardsNeeded));
+				currentNbCardsNeeded = 0;
+			} else {
+				userList.addAll(targetList);
+				currentNbCardsNeeded =- targetList.size();
+			}
+		}
+	}
+	
+	
 	private List<String> matchowanieList(List<String> listaWczytana, List<String> listaOpisana){
 		List<String> lista = new ArrayList<String>();	
 		for(int i= 0; i<listaWczytana.size(); i++) {
@@ -238,14 +240,9 @@ public class PanelDecklisty extends JFrame {
 			if(listaWczytana.get(i).equals("#created by ...") || listaWczytana.get(i).equals("#main") || listaWczytana.get(i).equals("#extra") || listaWczytana.get(i).equals("!side")) {
 				lista.add(listaWczytana.get(i));
 			}
-			
-			if (listaWczytana.size()>0 && listaWczytana.get(i).equals("#main"))
-				lista.add(listaWczytana.get(i));
-			else {
 				if(listaWczytana.size()>0) {
-					if(listaWczytana.get(i).equals("#created by ...") || listaWczytana.get(i).equals("#main") || listaWczytana.get(i).equals("#extra") || listaWczytana.get(i).equals("!side")) {
-						continue;
-					}
+					if(listaWczytana.get(i).equals("#created by ...") || listaWczytana.get(i).equals("#main") || listaWczytana.get(i).equals("#extra") || listaWczytana.get(i).equals("!side"))
+						continue;				
 					else {
 						String [] podzial = null;
 						List<String> siema = new ArrayList<String>();
@@ -258,9 +255,8 @@ public class PanelDecklisty extends JFrame {
 						lista.add(listaOpisana.get(index));	
 						listaOpisana.remove(index);
 						siema.remove(index);
-						}				
-					}
-				}	
+					}				
+				}
 			}		
 		return lista;
 	}
