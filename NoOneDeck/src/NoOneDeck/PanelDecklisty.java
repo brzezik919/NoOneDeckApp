@@ -72,9 +72,7 @@ public class PanelDecklisty extends JFrame {
 		przyciskWczytaj = new JButton("Wczytaj");
 		przyciskWczytaj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String fileFormat = nazwaKarty.getText().substring(nazwaKarty.getText().length()-4,nazwaKarty.getText().length());
-				System.out.println(fileFormat);
-				if (nazwaKarty.getText() != "" && fileFormat.equals(".ydk")) {
+				if (nazwaKarty.getText() != "" && nazwaKarty.getText().substring(nazwaKarty.getText().length()-4,nazwaKarty.getText().length()).equals(".ydk")) {
 						if(dir != null) {
 							List<String> decklista = new ArrayList<String>();
 							try {

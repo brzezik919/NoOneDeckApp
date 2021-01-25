@@ -77,9 +77,7 @@ public class PanelLogowania extends JFrame {
 					}
 				}
 				else {
-					PanelLogowania frame2 = new PanelLogowania();
-					
-					JOptionPane.showMessageDialog(frame2, "Nieprawidlowy login lub haslo");
+					JOptionPane.showMessageDialog(Logowanie.frame, "Nieprawidlowy login lub haslo");
 					poleLogin.setText("");
 					poleHaslo.setText("");
 				}

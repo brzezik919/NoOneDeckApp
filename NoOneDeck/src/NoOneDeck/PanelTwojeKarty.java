@@ -63,6 +63,7 @@ public class PanelTwojeKarty extends JFrame {
 					public void run() {
 						try {	
 							panelDodanieKarty = new PanelDodanieKarty();
+							panelDodanieKarty.setTitle("NoOneApp");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -83,6 +84,7 @@ public class PanelTwojeKarty extends JFrame {
 							String wybranaKarta = tabelaMojeKarty.getModel().getValueAt(tabelaMojeKarty.getSelectedRow(),1).toString();
 							String stan = tabelaMojeKarty.getModel().getValueAt(tabelaMojeKarty.getSelectedRow(),2).toString();
 							panelEdycjiStanu = new PanelEdycjiStanu(idWybranejKarty, wybranaKarta, stan);
+							panelEdycjiStanu.setTitle("NoOneApp");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

@@ -9,11 +9,13 @@ import java.sql.SQLException;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 
-@SuppressWarnings("serial")
 public class PanelGlowny extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	protected static String zalogowanyUzytkownik;
 	protected static PanelDecklisty panelDecklisty;
+	protected static PanelTwojeKarty panelTwojeKarty;
+	protected static PanelWyszukiwanieKarty panelWyszukanieKarty;
 	private JPanel contentPane;
 	public PanelGlowny(String login) {
 		zalogowanyUzytkownik = login;
@@ -32,8 +34,8 @@ public class PanelGlowny extends JFrame {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {	
-							@SuppressWarnings("unused")
-							PanelTwojeKarty panelTwojeKarty = new PanelTwojeKarty (zalogowanyUzytkownik);
+							panelTwojeKarty = new PanelTwojeKarty (zalogowanyUzytkownik);
+							panelTwojeKarty.setTitle("NoOneApp");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -50,8 +52,8 @@ public class PanelGlowny extends JFrame {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {	
-							@SuppressWarnings("unused")
-							PanelWyszukiwanieKarty panelWyszukanieKarty = new PanelWyszukiwanieKarty();
+							panelWyszukanieKarty = new PanelWyszukiwanieKarty();
+							panelWyszukanieKarty.setTitle("NoOneApp");
 						}catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -66,10 +68,10 @@ public class PanelGlowny extends JFrame {
 		przyciskDecklista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable(){
-					@SuppressWarnings("unused")
 					public void run() {
 						try {
 							panelDecklisty = new PanelDecklisty();
+							panelDecklisty.setTitle("NoOneApp");
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
