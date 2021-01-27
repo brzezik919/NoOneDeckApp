@@ -33,6 +33,7 @@ public class OkienkoPotwierdzajace extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Baza.usuniecieKarty(idWybranejKarty);
+					PanelTwojeKarty.wczytanieTabeli(PanelGlowny.zalogowanyUzytkownik);
 					((Window) PanelTwojeKarty.okienkoPotwierdzajace).dispose();
 				} catch (SQLException e1) {
 					e1.printStackTrace();

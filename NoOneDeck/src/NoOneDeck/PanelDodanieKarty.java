@@ -54,6 +54,7 @@ public class PanelDodanieKarty extends JFrame {
 						if(Baza.sprawdzKarte(nazwa)) {
 							Baza.dodajKarte(nazwa, ilosc, PanelGlowny.zalogowanyUzytkownik);
 							JOptionPane.showMessageDialog(PanelTwojeKarty.panelDodanieKarty, "Karta dodana prawidlowo");
+							PanelTwojeKarty.wczytanieTabeli(PanelGlowny.zalogowanyUzytkownik);
 							((Window) PanelTwojeKarty.panelDodanieKarty).dispose();
 						}
 						else

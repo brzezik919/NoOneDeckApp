@@ -43,10 +43,9 @@ public class PanelEdycjiStanu extends JFrame {
 		guzikEdycjaUzycia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String stan = (String)comboBoxZmianaUzycia.getSelectedItem();
-				try {
-					
+				try {				
 					Baza.zmianaStanu(stan, idWybranejKarty);
-					PanelTwojeKarty.wczytanieTabeli();
+					PanelTwojeKarty.wczytanieTabeli(PanelGlowny.zalogowanyUzytkownik);
 					((Window) PanelTwojeKarty.panelEdycjiStanu).dispose();					
 				} catch (SQLException e1) {
 					e1.printStackTrace();

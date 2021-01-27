@@ -88,12 +88,10 @@ public class Baza {
 		Statement stmt = con.createStatement();
 		List<String> wynik = new ArrayList<String>();
 		
-		//Poprawa wyszukiwania po czesci nazwy np 'Lord'
-		//ResultSet rs = stmt.executeQuery("select DISTINCT login from user inner join karta on user.idUser = karta.idUser inner join numer on karta.idNazwa = numer.idNumer where numer.nazwa LIKE '%"+nazwaKartyWyszukiwanej+"%'");
-		ResultSet rs = stmt.executeQuery("select DISTINCT login from user inner join karta on user.idUser = karta.idUser inner join numer on karta.idNazwa = numer.idNumer where numer.nazwa LIKE '"+nazwaKartyWyszukiwanej+"'");
+		ResultSet rs = stmt.executeQuery("select DISTINCT nazwa, login from numer inner join karta on numer.idNumer = karta.idNazwa inner join user on karta.idUser = user.idUser where nazwa like '%"+nazwaKartyWyszukiwanej+"%'");
 		while(true) {
 			if(rs.next()) {
-				wynik.add(rs.getString("login"));
+				wynik.add(rs.getString("login")+";"+rs.getString("nazwa"));
 			}
 			else {
 				break;

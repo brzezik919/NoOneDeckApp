@@ -67,13 +67,17 @@ public class PanelWyszukiwanieKarty extends JFrame {
 				e1.printStackTrace();
 			}
 			DefaultTableModel model = (DefaultTableModel)tabelaWyszukiwania.getModel();
+			if(model.getRowCount() > 0)
+				PanelTwojeKarty.czyszczenieTabeli(model);
+			
 			for (int i = 0; i < wlasciciel.size(); i++) {
-			try {
-				iloscKart = Baza.wyszukanieIlosci(wlasciciel.get(i), nazwaKartyWyszukiwanej);
+				String[] split = wlasciciel.get(i).split(";");	
+			try {								
+				iloscKart = Baza.wyszukanieIlosci(split[0], split[1]);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			model.addRow(new Object [] {nazwaKartyWyszukiwanej, iloscKart, wlasciciel.get(i)});
+			model.addRow(new Object [] {split[1], iloscKart, split[0]});
 			}
 		}
 		});

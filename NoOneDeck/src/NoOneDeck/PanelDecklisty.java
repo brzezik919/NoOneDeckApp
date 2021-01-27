@@ -109,8 +109,10 @@ public class PanelDecklisty extends JFrame {
 	
 	public void wczytanieTabeli(List <String> lista) {
 		DefaultTableModel model = (DefaultTableModel)tabelaMojeKarty.getModel();
-		for (int i = 0; i < listaKart.size( ); i++) {
-			
+		if(model.getRowCount() > 0)
+			PanelTwojeKarty.czyszczenieTabeli(model);
+		
+		for (int i = 0; i < listaKart.size( ); i++) {		
 			if(lista.get(i).equals("#created by ..."))
 				continue;
 			else if(lista.get(i).equals("#main"))

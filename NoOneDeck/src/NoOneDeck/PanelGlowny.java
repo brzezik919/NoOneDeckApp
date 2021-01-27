@@ -12,11 +12,12 @@ import java.awt.event.ActionEvent;
 public class PanelGlowny extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	protected static String zalogowanyUzytkownik;
+	public static String zalogowanyUzytkownik;
 	protected static PanelDecklisty panelDecklisty;
 	protected static PanelTwojeKarty panelTwojeKarty;
 	protected static PanelWyszukiwanieKarty panelWyszukanieKarty;
 	private JPanel contentPane;
+	
 	public PanelGlowny(String login) {
 		zalogowanyUzytkownik = login;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

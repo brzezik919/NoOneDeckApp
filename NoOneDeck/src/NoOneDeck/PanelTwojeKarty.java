@@ -24,10 +24,9 @@ public class PanelTwojeKarty extends JFrame {
 	private static JTable tabelaMojeKarty;
 	public static List<String> listaKart = new ArrayList<String>();
 	
+	
 	public PanelTwojeKarty(String zalogowanyUzytkownik) throws SQLException {
-		String user = zalogowanyUzytkownik;
-		
-		listaKart = Baza.wczytanieKart(user);
+				
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -54,7 +53,7 @@ public class PanelTwojeKarty extends JFrame {
 		tabelaMojeKarty.getColumnModel().getColumn(2).setMinWidth(50);
 		tabelaMojeKarty.getColumnModel().getColumn(2).setMaxWidth(50);
 		scrollPane.setViewportView(tabelaMojeKarty);
-		wczytanieTabeli();
+		wczytanieTabeli(zalogowanyUzytkownik);
 		tabelaMojeKarty.changeSelection(0, 0, false, false);
 		JButton guzikDodajKarte = new JButton("Dodaj Karte");
 		guzikDodajKarte.addActionListener(new ActionListener() {
@@ -101,17 +100,22 @@ public class PanelTwojeKarty extends JFrame {
 				String idWybranejKarty = tabelaMojeKarty.getModel().getValueAt(tabelaMojeKarty.getSelectedRow(),0).toString();
 				okienkoPotwierdzajace = new OkienkoPotwierdzajace(idWybranejKarty);
 				if(okienkoPotwierdzajace == null)
-					wczytanieTabeli();
+					try {
+						wczytanieTabeli(zalogowanyUzytkownik);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 			}
 		});
 		usunKarte.setBounds(256, 204, 89, 23);
 		contentPane.add(usunKarte);
 	}
 	
-	public static void wczytanieTabeli() {
+	public static void wczytanieTabeli(String user) throws SQLException {
 		DefaultTableModel model = (DefaultTableModel)tabelaMojeKarty.getModel();
-		//if(model.getRowCount() > 0)
-			//czyszczenieTabeli(model);
+		if(model.getRowCount() > 0)
+			czyszczenieTabeli(model);
+		listaKart = Baza.wczytanieKart(user);
 		for (int i = 0; i < listaKart.size( )- 2; i = i+3) {
 			model.addRow(new Object [] {listaKart.get(i), listaKart.get(i+1), listaKart.get(i+2)});
 		}
@@ -119,7 +123,7 @@ public class PanelTwojeKarty extends JFrame {
 	
 	public static void czyszczenieTabeli(DefaultTableModel table) {
 		int count = table.getRowCount();
-		for(int i = count; i > 0; i--)
+		for(int i = count-1; i >= 0; i--)
 			table.removeRow(i);
 	}
 }
